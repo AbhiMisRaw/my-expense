@@ -40,13 +40,23 @@ def create_expense(requset):
     # weekly expenses
     last_week = datetime.date.today() - datetime.timedelta(days=7)
     last_week_expense = Expense.objects.filter(date__gt=last_week)
-    weekly_expense = last_month_expense.aggregate(Sum("amount"))
+    weekly_expense = last_week_expense.aggregate(Sum("amount"))
 
-    print(
-        yearly_expense,
-        total_expense,
-        monthly_expense,
+    daily_sums = (
+        Expense.objects.filter()
+        .values("date")
+        .order_by("date")
+        .annotate(sum=Sum("amount"))
     )
+
+    categorical_sums = (
+        Expense.objects.filter()
+        .values("category")
+        .order_by("category")
+        .annotate(sum=Sum("amount"))
+    )
+    print(categorical_sums)
+
     return render(
         requset,
         "expense_app/index.html",
@@ -57,6 +67,8 @@ def create_expense(requset):
             "yearly_expense": yearly_expense,
             "weekly_expense": weekly_expense,
             "monthly_expense": monthly_expense,
+            "daily_sums": daily_sums,
+            "categorical_sums": categorical_sums,
         },
     )
 
