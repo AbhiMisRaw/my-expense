@@ -15,19 +15,50 @@
     <nav class="shadow-lg p-5 pl-1">
 
         <div class="container flex flex-wrap justify-between items-center mx-auto">
-            <a href="#" class="flex">
+            <a href="{% url 'home' %}" class="flex">
                 <img class="h-10 mr-3" src="{% static 'expense_app/images/expense.png' %}" alt="">
                 <span class="self-center text-xl font-semibold">
                     MyExpense
                 </span>
             </a>
 
+            <div>
+                <div class="flex flex-row">
+                    {% if user.is_authenticated %}
+                    <div>
+                        <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                            <button class="bg-blue-500 px-5 py-2 rounded-lg text-white font-bold ">
+                                {{ request.user.username }}
+                            </button>
+                        </a>
+                    </div>
+                    <div class="ml-2">
+                        <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                            href="{% url 'logout' %}">
+                            <button class="bg-blue-500 px-5 py-2 rounded-lg text-white font-bold ">
+                                Logout
+                            </button>
+                        </a>
+                    </div>
+                    {% else %}
+                    <a class=" mr-5 inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                        href="{% url 'login' %}">Login</a>
+
+                    <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                        href="{% url 'register' %}">Register</a>
+                    {% endif %}
+
+                </div>
+            </div>
         </div>
 
     </nav>
     {% block body %}
 
     {% endblock %}
+    <footer class="bg-gray-400 text-center py-4">
+        <p>&copy; 2024 MyExpense. All rights reserved.</p>
+    </footer>
 </body>
 
 </html>
